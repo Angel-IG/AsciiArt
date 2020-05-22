@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"image"
 	"image/color"
@@ -57,7 +58,17 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	file, err := os.Open(os.Args[1])
+	var file *os.File
+	var err error
+
+	if len(os.Args) > 1 {
+		file, err = os.Open(os.Args[1])
+	} else {
+		scanner := bufio.NewScanner(os.Stdin)
+		scanner.Scan()
+		file, err = os.Open(scanner.Text())
+	}
+
 	if err != nil {
 		log.Fatal(err)
 	}
